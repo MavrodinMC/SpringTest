@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.Blog;
-import com.example.demo.mockedData.BlogMockedData;
+import com.example.demo.repository.BlogRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,23 +11,24 @@ import java.util.Map;
 @RestController
 public class BlogController {
 
-    BlogMockedData blogMockedData = BlogMockedData.getInstance();
+    @Autowired
+    private BlogRepository blogRepository;
 
     @GetMapping("/blog")
     public List<Blog> index() {
-        return blogMockedData.fetchBlogs();
+        return blogRepository.findAll();
     }
 
     @GetMapping("/blog/{id}")
     public Blog show(@PathVariable String id) {
         int blogId = Integer.parseInt(id);
-        return blogMockedData.getBlogById(blogId);
+        return blogRepository.findOneById(blogId);
     }
 
     @PostMapping("/blog/search")
     public List<Blog> search(@RequestBody Map<String, String> body) {
         String searchTerm = body.get("text");
-        return blogMockedData.searchBlogs(searchTerm);
+        return blogRepository.findByTitleContainingOrContentContaining(searchTerm, searchTerm);
     }
 
     @PostMapping("/blog")
@@ -34,7 +36,8 @@ public class BlogController {
         int id = Integer.parseInt(body.get("id"));
         String title = body.get("title");
         String content = body.get("content");
-        return blogMockedData.createBlog(id, title, content);
+        Blog newBlog = new Blog(title, content);
+        return blogRepository.save(newBlog);
     }
 
     @PutMapping("/blog/{id}")
@@ -42,12 +45,14 @@ public class BlogController {
             int blogId = Integer.parseInt(id);
             String title = body.get("title");
             String content = body.get("content");
-            return blogMockedData.updateBlog(blogId, title, content);
+            Blog newBlog = new Blog(blogId, title, content);
+            return blogRepository.save(newBlog);
         }
+
         @DeleteMapping("blog/{id}")
-        public boolean delete (@PathVariable String id){
+        public void delete (@PathVariable String id){
             int blogId = Integer.parseInt(id);
-            return blogMockedData.deleteBlog(blogId);
+            blogRepository.deleteById(blogId);
         }
 
     }

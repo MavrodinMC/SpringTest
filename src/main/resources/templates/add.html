@@ -1,0 +1,9 @@
+<form action="#" th:action="@{/add}" th:object="${blog}" method="post">
+    <label for="title">title</label>
+    <input type="text" th:field="*{title}" id="title" placeholder="title">
+    <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+    <label for="content">content</label>
+    <input type="text" th:field="*{content}" id="content" placeholder="content">
+    <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
+    <input type="submit" value="Add Blog">
+</form>

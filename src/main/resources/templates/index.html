@@ -1,0 +1,22 @@
+<div th:switch="${blogs}">
+    <h2 th:case="null">No blogs yetaaa!</h2>
+    <div th:case="*">
+        <h2>Blogs</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Content</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="blog : ${blogs}">
+                <td th:text="${blog.id}"></td>
+                <td th:text="${blog.title}"></td>
+                <td th:text="${blog.content}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
