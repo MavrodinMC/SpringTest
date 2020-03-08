@@ -48,7 +48,6 @@ public class BlogController {
         public boolean delete (@PathVariable String id){
             int blogId = Integer.parseInt(id);
             return blogMockedData.deleteBlog(blogId);
-            // add simple comment for test
         }
 
     }
